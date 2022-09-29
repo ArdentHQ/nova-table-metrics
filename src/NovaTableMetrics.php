@@ -4,22 +4,21 @@ declare(strict_types=1);
 
 namespace Ardenthq\NovaTableMetrics;
 
+use Illuminate\Support\Collection;
 use Laravel\Nova\Card;
 
 class NovaTableMetrics extends Card
 {
     public array $items = [];
 
-    public bool $hasRanges = true;
+    public bool $hasPeriodSelector = true;
 
-    public array $ranges = [
-        'daily'   => 'Last 24 hours',
-        'weekly'  => 'Last 7 days',
-        'monthly' => 'Last 30 days',
-        'all'     => 'All time',
-    ];
+    /**
+     * @var Period[]
+     */
+    public array $periods = [];
 
-    public string $defaultRange = 'daily';
+    public ?Period $defaultPeriod = null;
 
     public function __construct(
         public string $title,
@@ -28,44 +27,64 @@ class NovaTableMetrics extends Card
     ) {
     }
 
-    /**
-     * Get the component name for the element.
-     *
-     * @return string
-     */
-    public function component()
+    public static function fromTable(Table $table) : self
+    {
+        $card = new self(
+            title: $table->title(),
+            heading: $table->heading(),
+            detail: $table->detailHeading(),
+        );
+
+        $card->items(
+            $table->items($table->defaultPeriod())
+        )->withMeta([
+            'uriKey' => get_class($table),
+        ])->periods($table->periods())->defaultPeriod($table->defaultPeriod());
+
+        if (! $table->hasPeriodSelector()) {
+            $card->withoutPeriodSelector();
+        }
+
+        return $card;
+    }
+
+    public function component() : string
     {
         return 'nova-table-metrics';
     }
 
-    public function withoutRanges() : self
+    public function withoutPeriodSelector() : self
     {
-        $this->hasRanges = false;
+        $this->hasPeriodSelector = false;
 
         return $this;
     }
 
-    public function defaultRange(string $range) : self
+    public function defaultPeriod(?Period $period) : self
     {
-        $this->defaultRange = $range;
-
-        return $this;
-    }
-
-    public function ranges(array $ranges) : self
-    {
-        $this->ranges = $ranges;
+        $this->defaultPeriod = $period;
 
         return $this;
     }
 
     /**
-     * @param TableRow[] $items
+     * @param Period[] $periods
      * @return self
      */
-    public function items(array $items) : self
+    public function periods(array $periods) : self
     {
-        $this->items = $items;
+        $this->periods = $periods;
+
+        return $this;
+    }
+
+    /**
+     * @param Collection<int, TableRow> $items
+     * @return self
+     */
+    public function items(Collection $items) : self
+    {
+        $this->items = $items->values()->all();
 
         return $this;
     }
@@ -81,13 +100,13 @@ class NovaTableMetrics extends Card
             'title'     => $this->title,
             'heading'   => $this->heading,
             'detail'    => $this->detail,
-            'hasRanges' => $this->hasRanges,
-            'range'     => $this->defaultRange,
-            'ranges'    => collect($this->ranges)->map(fn ($range, $key) => [
-                'label' => $range,
-                'value' => $key,
-            ])->values()->all(),
+            'hasPeriodSelector' => $this->hasPeriodSelector,
+            'period'     => $this->defaultPeriod?->value,
             'items' => $this->items,
+            'periods'    => collect($this->periods)->map(fn ($period, $key) => [
+                'label' => $period->label(),
+                'value' => $period->value,
+            ])->values()->all(),
         ], parent::jsonSerialize());
     }
 }

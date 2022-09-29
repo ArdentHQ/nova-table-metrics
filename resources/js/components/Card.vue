@@ -4,23 +4,23 @@ import TableRow from "./TableRow.vue";
 
 const props = defineProps(["card"]);
 
-const currentRange = ref(
-    props.card.ranges.filter((range) => range.value === props.card.range)[0]
+const currentPeriod = ref(
+    props.card.periods.filter((period) => period.value === props.card.period)[0]
 );
 const loading = ref(false);
 const items = ref(props.card.items);
 
-const changeRange = (range) => {
-    if (!props.card.hasRanges) {
+const changeRange = (period) => {
+    if (!props.card.hasPeriodSelector) {
         return;
     }
 
-    currentRange.value = props.card.ranges.filter((r) => r.value === range)[0];
+    currentPeriod.value = props.card.periods.filter((p) => p.value === period)[0];
     loading.value = true;
 
     Nova.request()
         .get(
-            `/nova-vendor/nova-table-metrics?card=${props.card.uriKey}&range=${range}`
+            `/nova-vendor/nova-table-metrics?table=${props.card.uriKey}&period=${period}`
         )
         .then(({ data }) => {
             items.value = data;
@@ -34,17 +34,17 @@ const changeRange = (range) => {
         <header class="flex items-center justify-between p-4">
             <h3 class="text-gray-800 w-full font-semibold dark:text-white">
                 {{ card.title }}
-                <template v-if="card.hasRanges"
-                    >({{ currentRange.label.toLowerCase() }})</template
+                <template v-if="card.hasPeriodSelector"
+                    >({{ currentPeriod.label.toLowerCase() }})</template
                 >
             </h3>
 
             <SelectControl
-                v-if="card.hasRanges"
+                v-if="card.hasPeriodSelector"
                 class="ml-auto w-[10rem] flex-shrink-0"
                 size="xs"
-                :options="card.ranges"
-                :selected="currentRange.value"
+                :options="card.periods"
+                :selected="currentPeriod.value"
                 @change="changeRange"
                 :aria-label="__('Select Ranges')"
             />
