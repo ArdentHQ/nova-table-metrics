@@ -45,11 +45,59 @@ class GreatestShows extends Table
     {
         return collect([
             TableRow::make('Silicon Valley', '42,184')
-                    ->url('https://wwwyoutube.com/watch?v=dQw4w9WgXcQ')
+                    ->url('https://www.youtube.com/watch?v=dQw4w9WgXcQ')
                     ->openInNewTab(),
 
             //
         ]);
+    }
+}
+```
+
+#### Disable date filters
+
+To disable date filters, override the `hasPeriodSelector` method on the Table component:
+
+```php
+class GreatestShows extends Table
+{
+    public function title() : string
+    {
+        return 'Greatest TV shows';
+    }
+
+    public function heading() : string
+    {
+        return 'Title';
+    }
+
+    public function detailHeading() : string
+    {
+        return 'Views';
+    }
+
+    public function defaultPeriod() : ?Period
+    {
+        return null;
+    }
+
+    /**
+     * @return Collection<int, TableRow>
+     */
+    public function items(?Period $period) : Collection
+    {
+        return collect([
+            TableRow::make('Silicon Valley', '42,184')
+                    ->url('https://www.youtube.com/watch?v=dQw4w9WgXcQ')
+                    ->openInNewTab(),
+
+            //
+        ]);
+    }
+
+    public function hasPeriodSelector() : bool
+    {
+        return false;
     }
 }
 ```
