@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace MSQ\NovaTableMetrics;
+namespace Ardent\NovaTableMetrics;
 
 use JsonSerializable;
 use Laravel\Nova\Makeable;

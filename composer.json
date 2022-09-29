@@ -1,5 +1,5 @@
 {
-    "name": "msq/nova-table-metrics",
+    "name": "ardenthq/nova-table-metrics",
     "description": "Advanced table metrics for Laravel Nova.",
     "type": "library",
     "license": "MIT",
@@ -21,13 +21,13 @@
     ],
     "autoload": {
         "psr-4": {
-            "MSQ\\NovaTableMetrics\\": "src/"
+            "Ardent\\NovaTableMetrics\\": "src/"
         }
     },
     "extra": {
         "laravel": {
             "providers": [
-                "MSQ\\NovaTableMetrics\\CardServiceProvider"
+                "Ardent\\NovaTableMetrics\\CardServiceProvider"
             ]
         }
     },
