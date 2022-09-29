@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Ardent\NovaTableMetrics;
+namespace Ardenthq\NovaTableMetrics;
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;

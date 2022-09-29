@@ -21,13 +21,13 @@
     ],
     "autoload": {
         "psr-4": {
-            "Ardent\\NovaTableMetrics\\": "src/"
+            "Ardenthq\\NovaTableMetrics\\": "src/"
         }
     },
     "extra": {
         "laravel": {
             "providers": [
-                "Ardent\\NovaTableMetrics\\CardServiceProvider"
+                "Ardenthq\\NovaTableMetrics\\CardServiceProvider"
             ]
         }
     },
