@@ -1,6 +1,12 @@
 # Laravel Nova Table Metrics
 
 <p align="center">
+    <img src="./banner.png" />
+</p>
+
+> A custom card allowing you to add Table Metrics with a Date Period filter
+
+<p align="center">
     <img src="./example.png" />
     <img src="./example-dark.png" />
 </p>
