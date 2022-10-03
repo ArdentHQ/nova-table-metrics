@@ -5,7 +5,7 @@
     "license": "MIT",
     "require": {
         "php": "^8.0",
-        "laravel/framework": "^9.31",
+        "laravel/framework": "^9.33",
         "laravel/nova": "^4.0"
     },
     "require-dev": {
